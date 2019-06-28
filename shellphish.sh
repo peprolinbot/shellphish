@@ -304,7 +304,7 @@ command -v ssh > /dev/null 2>&1 || { echo >&2 "I require SSH but it's not instal
 if [[ -e sendlink ]]; then
 rm -rf sendlink
 fi
-$(which sh) -c 'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R 80:localhost:'$port' serveo.net 2> /dev/null > sendlink ' &
+$(which sh) -c 'ssh -o StrictHostKeyChecking=no -o ServerAliveInterval=60 -R '$subdomain':80:localhost:'$port' serveo.net 2> /dev/null > sendlink ' &
 printf "\n"
 sleep 10
 send_link=$(grep -o "https://[0-9a-z]*\.serveo.net" sendlink)
@@ -332,6 +332,10 @@ default_port="3333" #$(seq 1111 4444 | sort -R | head -n1)
 printf '\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Choose a Port (Default:\e[0m\e[1;77m %s \e[0m\e[1;92m): \e[0m' $default_port
 read port
 port="${port:-${default_port}}"
+default_subdomain=$(gpw 1 6) #Change this to your own it should look like this: default_subdomain="incubo"
+printf '\e[1;92m[\e[0m\e[1;77m*\e[0m\e[1;92m] Choose a subdomain (Random default=\e[0m\e[1;77m %s \e[0m\e[1;92m. Change default to a fixed value in line 335 of this script): \e[0m' $default_subdomain
+read subdomain
+subdomain="${subdomain:-${default_subdomain}}"
 serverx
 
 }
@@ -448,4 +452,3 @@ done
 banner
 dependencies
 menu
-
